@@ -138,6 +138,8 @@ void bootloader_main(void)
 	// undo the setup the bootloader code has done.
 	board_reset_cleanup();
 
+	__disable_irq();
+
 #ifdef USE_CORE_RESET
 	jump_to_flash(FLASH_FW_ADDR, 0);
 #elif
@@ -166,7 +168,8 @@ bool button_pressed(void)
 bool bootloader_sw_triggered(void)
 {
 	// Was reset caused by watchdog timer (WDT)?
-	return PM->RCAUSE.reg & PM_RCAUSE_WDT;
+	// but RTC not running
+	return ((PM->RCAUSE.reg & PM_RCAUSE_WDT) && !(RTC->MODE1.CTRL.reg & RTC_MODE0_CTRL_ENABLE));
 }
 
 void main_bl(void) {
