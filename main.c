@@ -107,9 +107,16 @@ void bootloader_main(void)
 	// Hook here for very early hardware init that some boards need
 	board_setup_early();
 
+	// keep LDO in high-performance mode even in standby
+	SYSCTRL->VREG.bit.RUNSTDBY = 1; // power impact ~ 0.2mA
+	// Errata 13140: Make sure that the Flash does not power all the way down
+	// when in sleep mode. This errata has been fixed as of revision D of SAMD21
+	NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;
+
 	hardware_detect();
 
-	clock_init_usb(GCLK_SYSTEM);
+	//clock_init_usb(GCLK_SYSTEM);
+	clock_init_crystal(GCLK_SYSTEM, 1);
 	init_systick();
 	nvm_init();
 

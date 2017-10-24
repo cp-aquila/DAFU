@@ -81,8 +81,10 @@ void clock_init_crystal(u8 clk_system, u8 clk_32k) {
     = SYSCTRL_XOSC32K_ENABLE
     | SYSCTRL_XOSC32K_XTALEN
     | SYSCTRL_XOSC32K_EN32K
-    | SYSCTRL_XOSC32K_AAMPEN
+    | SYSCTRL_XOSC32K_STARTUP(0x03)
     | SYSCTRL_XOSC32K_RUNSTDBY;
+
+  while (!SYSCTRL->PCLKSR.bit.XOSC32KRDY);
 
   gclk_enable(clk_32k, GCLK_SOURCE_XOSC32K, 1);
 
