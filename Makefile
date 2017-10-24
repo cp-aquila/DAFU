@@ -23,10 +23,14 @@ TARGET_NAME = dafu
 # for any value here in the D21 family.
 PART = SAMD21G18A
 
+GIT_SHORT_TAG = \"$(shell git rev-parse --short HEAD)\"
+DAFU_VERSION = $(shell git describe --abbrev=0 --tags)
+
 # Compiler flags.
 CFLAGS = -Wall --std=gnu99 -Os -g3 \
 			-flto -fdata-sections -ffunction-sections -funsigned-char -funsigned-bitfields \
-			-mcpu=cortex-m0plus -mthumb -D __$(PART)__ -I .
+			-D DAFU_VERSION=$(DAFU_VERSION) -D GIT_SHORT_TAG=$(GIT_SHORT_TAG) \
+			-mcpu=cortex-m0plus -mthumb -D __$(PART)__  -I .
 
 # USB PID/VID and other branding values
 CFLAGS += \

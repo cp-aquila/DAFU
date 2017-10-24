@@ -16,6 +16,18 @@
 #include "boot.h"
 #include "common/nvm.h"
 
+__attribute__ ((section(".version")))
+__attribute__ ((used))
+const struct {
+	uint16_t version;
+	char git_short_tag[8];
+  char datetime[32];
+} version_data = {
+	.version = DAFU_VERSION,
+	.git_short_tag = GIT_SHORT_TAG,
+	.datetime = __DATE__ " " __TIME__
+};
+
 __attribute__ ((section(".copyright")))
 __attribute__ ((used))
 const char copyright_note[] = COPYRIGHT_NOTE;

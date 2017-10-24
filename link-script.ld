@@ -54,7 +54,8 @@ SEARCH_DIR(.)
 /* Memory Spaces Definitions */
 MEMORY
 {
-  rom    (rx)  : ORIGIN = 0x00000000, LENGTH = 0x00001000
+  rom    (rx)  : ORIGIN = 0x00000000, LENGTH = 0x00000F80
+  ver    (r)   : ORIGIN = 0x00000F80, LENGTH = 0x00000080
   ram    (rwx) : ORIGIN = 0x20000000, LENGTH = 0x00001000
 }
 
@@ -68,6 +69,12 @@ STACK_SIZE = DEFINED(STACK_SIZE) ? STACK_SIZE : DEFINED(__stack_size__) ? __stac
 /* Section Definitions */
 SECTIONS
 {
+    .version :
+    {
+        . = ALIGN(4);
+        KEEP(*(.version))
+    } > ver
+
     .text :
     {
         . = ALIGN(4);

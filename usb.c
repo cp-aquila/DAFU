@@ -29,7 +29,7 @@ const USB_DeviceDescriptor device_descriptor = {
 	.bMaxPacketSize0        = 64,
 	.idVendor               = 0x1209,
 	.idProduct              = 0x7551,
-	.bcdDevice              = 0x0002,
+	.bcdDevice              = DAFU_VERSION,
 
 	.iManufacturer          = 0x01,
 	.iProduct               = 0x02,
