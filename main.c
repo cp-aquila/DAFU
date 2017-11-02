@@ -43,6 +43,7 @@ void board_setup_early(void) __attribute__((weak, alias("noopFunction")));
 void board_setup_late(void) __attribute__((weak, alias("noopFunction")));
 void board_reset_cleanup(void) __attribute__((weak, alias("noopFunction")));
 bool button_pressed(void) __attribute__((weak));
+void led_toggle(void) __attribute__((weak, alias("noopFunction")));
 
 
 /*** SysTick ***/
@@ -143,7 +144,8 @@ void bootloader_main(void)
 	usb_attach();
 
 	while(!exit_and_jump) {
-		__WFI(); /* conserve power */
+		delay_ms(100);
+		led_toggle();
 	}
 
 	delay_ms(25);
