@@ -179,11 +179,42 @@ void board_reset_cleanup(void)
   while (SERCOM1->SPI.CTRLA.reg & SERCOM_SPI_CTRLA_SWRST);
 }
 
-#if 0
 bool button_pressed(void)
 {
-	// Return T to do DFU rather than run normal firmware.
-	return false;
-}
-#endif
+  bool dm, dp, vb;
 
+  pin_in(PIN_VBUS);
+  delay_cycles(100);
+  vb = pin_read(PIN_VBUS);
+  if (vb == true) {
+    // there is power on VBUS. better stop right here
+    return false;
+  }
+
+  // step1, drive dp low, check if both pins have a low level
+  pin_out(PIN_DP);
+  pin_low(PIN_DP);
+  pin_pull_up(PIN_DM);
+  delay_cycles(100);
+  dm = pin_read(PIN_DM);
+  dp = pin_read(PIN_DP);
+  if ((dm == true) || (dp == true)) {
+    return false;
+  }
+
+  // step2, drive dm low, check if both pins have a low level
+  pin_out(PIN_DM);
+  pin_low(PIN_DM);
+  pin_pull_up(PIN_DP);
+  delay_cycles(100);
+  dm = pin_read(PIN_DM);
+  dp = pin_read(PIN_DP);
+  if ((dm == true) || (dp == true)) {
+    return false;
+  }
+
+  // all checks were positive
+  pin_in(PIN_DP);
+  pin_in(PIN_DM);
+  return true;
+}

@@ -178,14 +178,6 @@ bool flash_valid() {
 }
 
 
-bool button_pressed(void)
-{
-	// Repalce this function (in another file) if you want to 
-	// test for a pin or button being pressed during boot time
-	// to get into DFU mode.
-	return false;
-}
-
 bool bootloader_sw_triggered(void)
 {
 	// Was reset caused by watchdog timer (WDT)?
